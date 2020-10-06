@@ -69,12 +69,13 @@ class TRCA(BaseEstimator, ClassifierMixin):
         '''
         '''
         epochs = X.shape[-1]
-        idx = np.argsort(y)
-        X = X[:, :, idx]
+        # idx = np.argsort(y)
+        # X = X[:, :, idx]
         X = X.transpose((2, 1, 0))
         #
         fb_coefs = np.arange(1, 6)**(-1.25) + 0.25
-        r = np.zeros((self.n_fbs, epochs))
+        # r = np.zeros((self.n_fbs, epochs))
+		r = np.zeros((self.n_fbs, self.num_targs))
         results = []
         for targ_i in range(epochs):
             test_tmp = X[targ_i, :, :]
@@ -95,7 +96,7 @@ class TRCA(BaseEstimator, ClassifierMixin):
             results.append(tau)
 
         results = np.array(results)
-        results[idx] = results
+        # results[idx] = results
         return results
 
     def predict_proba(self, X):
