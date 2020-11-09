@@ -75,7 +75,7 @@ class TRCA(BaseEstimator, ClassifierMixin):
         #
         fb_coefs = np.arange(1, 6)**(-1.25) + 0.25
         # r = np.zeros((self.n_fbs, epochs))
-		r = np.zeros((self.n_fbs, self.num_targs))
+        r = np.zeros((self.n_fbs, self.num_targs))
         results = []
         for targ_i in range(epochs):
             test_tmp = X[targ_i, :, :]
