@@ -17,10 +17,12 @@ class SWLDA(BaseEstimator, ClassifierMixin):
         self.inmodel = None
     
     def fit(self, X, y=None, penter=0.1, premove=0.15):
-        b, se, pval, inmodel, stats, nextstep, history = stepwisefit(X, y, penter=0.1, premove=0.15)
-        x1 = X[y==1,:]
+        yy = y
+        yy[yy==0.] = -1
+        b, se, pval, inmodel, stats, nextstep, history = stepwisefit(X, yy, penter=0.1, premove=0.15)
+        x1 = X[yy==1,:]
         mu1 = x1.mean(axis=0)
-        x2 = X[y==0,:] 
+        x2 = X[yy==-1,:] 
         mu2 = x2.mean(axis=0)
         mu_both = (mu1 + mu2) / 2 
         self.w = np.zeros(b.shape)
