@@ -1,0 +1,109 @@
+
+Copyright (c) 2011 Collin RM Stocks
+All Rights Reserved
+
+    This file is part of Py3GUI
+
+    Py3GUI is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Py3GUI is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+== Py3GUI Documentation ==
+
++++ Notes +++
+
+The original author, Collin RM Stocks, would like to maintain this application.
+In order for him to do that, it is important that he is notified of any changes
+to the source code so that he can maintain his own personal copy.
+
+Collin RM Stocks is has created a public version control repository on
+github.com to host the ``official version'' of the source code of this project.
+Now that this is in place, code contributions should be submitted in the form
+of patches. There is plenty of documentation online as to how to do this.
+
+Questions and comments (and later, patches) should be directed toward:
+    "Collin RM Stocks" <collinstocks (amphora) gmail (fullstop) com>
+
++++ Building +++
+
+If you have all the prerequisites installed, this program can simply be run as:
+    python py3gui.py
+
+If you have all the prerequisites installed on your personal machine, but may
+not have them available on machines you plan to use this program on, you can
+build it into a Windows executable by running:
+    python setup.py
+
++++ Setup +++
+
+The compiled Py3GUI can be extracted anywhere and run from the dist/ directory.
+
++++ Running +++
+
+Launch py3gui.exe from the dist/ directory.
+
++++ Usage +++
+
+The interface is meant to be fairly self-explanatory. When in doubt, just
+click on stuff. The worst that can happen is that you get a helpful error
+message.
+
+The flow of the interface is from top to bottom. The first step is to select
+data files. That can be done by clicking the button at the top labeled
+``Select Training Data''. An open-file dialogue will appear which only shows
+files with the ``.dat'' extension. (Note: it is also possible to load ``.pk''
+files by selecting that file type from the pull-down menu in the dialogue. This
+feature is for those of you who might be analyzing data from BCPy2000.)
+
+When data files are selected, they show up in the list below the ``Select
+Training Data'' button. If you accidentally selected a file you did not mean
+to select, you can click on it and then click ``Remove Selected Files From
+List''. If you missed a file, you can click on ``Select Training Data'' again
+and select it. The additional data file(s) will be added to the list. Don't
+worry about accidentally selecting a data file twice, as duplicates are removed.
+
+The next step is to choose the parameters used when processing the data. These
+options have the same meaning as they do in the MatLab version of the P300GUI,
+except that in the Py3GUI, channel names are not supported in the ``Channel
+Set'' parameter. Only channel numbers are supported.
+
+For the ``Classification Method'' parameter, note that only one classification
+method is currently supported. This may change in the future.
+
+For the ``Attempt to Remove Anomalies'' parameter, note that it is unchecked.
+Leave it that way. This option is only meant to help to remove zero-block
+errors, which should not affect the data set that you are using. It is quite
+possible that using this option on data without zero-block errors could cause
+unexpected behavior.
+
+The next step is to select ``Generate Feature Weights''. The GUI will freeze
+for several seconds (depending on the amount of data selected and the speed
+of the computer that Py3GUI is running on) and then show a save file dialogue.
+The name you type will be the name of the parameter fragment containing the
+feature weights. The parameter fragment will automatically be saved in the
+last directory you opened data from, unless you specify otherwise.
+
+It is possible to finish here and exit the Py3GUI. However, if you want to run
+some diagnostics on the data or the feature weights, try clicking on
+``Diagnostic Plot'' or ``Test Weights''. It is also possible to test the
+feature weights on a different data set, by removing all of the data and
+selecting more. Additionally, it is possible to test a different set of
+feature weights, by clicking ``Browse'' in the ``Use weights from'' parameter,
+and selecting either a parameter file that contains weights, or a data file
+where weights were loaded into BCI2000 before the data was collected.
+
+Have fun!
+
+Remember, questions and comments should be directed to:
+    "Collin RM Stocks" <collinstocks (amphora) gmail (fullstop) com>
+
