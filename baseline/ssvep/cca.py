@@ -5,7 +5,7 @@ import numpy as np
 
 
 class CCA(BaseEstimator, ClassifierMixin):
-    
+
     def __init__(self, n_harmonics=2, frequencies=[], phase=None, references=None, length=4):
         self.n_harmonics = n_harmonics
         self.frequencies = frequencies
@@ -18,17 +18,20 @@ class CCA(BaseEstimator, ClassifierMixin):
         samples = X.shape[1]
         t = np.linspace(0.0, float(self.length), samples)
         if self.phase:
-            refs = [ [np.cos(2*np.pi*f*t*i),np.sin(2*np.pi*f*t*i)] for f in self.frequencies for i in range(1, self.n_harmonics+1)]
+            refs = [[np.cos(2*np.pi*f*t*i+self.phase[k]*i), np.sin(2*np.pi*f*t*i+self.phase[k]*i)]
+                    for k, f in enumerate(self.frequencies) for i in range(1, self.n_harmonics+1)]
         else:
-            refs = [ [np.cos(2*np.pi*f*t*i+self.phase[k]*i), np.sin(2*np.pi*f*t*i+self.phase[k]*i)] for k,f in enumerate(self.frequencies) for i in range(1, self.n_harmonics+1)]
-        self.references =  np.array(refs).reshape(len(self.frequencies), 2*self.n_harmonics, samples) 
+            refs = [[np.cos(2*np.pi*f*t*i), np.sin(2*np.pi*f*t*i)]
+                    for f in self.frequencies for i in range(1, self.n_harmonics+1)]
+        self.references = np.array(refs).reshape(
+            len(self.frequencies), 2*self.n_harmonics, samples)
         return self
 
     def decision_function(self, X):
         return self._apply_cca(X)
 
     def predict(self, X, y=None):
-        return np.argmax(self.decision_function(X)) 
+        return np.argmax(self.decision_function(X))
 
     def predict_proba(self, X):
         pass
@@ -36,14 +39,15 @@ class CCA(BaseEstimator, ClassifierMixin):
     def _apply_cca(self, X):
         coefs = []
         for i in range(self.references.shape[0]):
-            coefs.append(self._cca_coef(X,self.references[i,:,:]))
+            coefs.append(self._cca_coef(X, self.references[i, :, :]))
         coefs = np.array(coefs).transpose()
         return coefs
 
-    def _cca_coef(self, X,Y):
+    def _cca_coef(self, X, Y):
         if X.shape[1] != Y.shape[1]:
-            raise Exception('unable to apply CCA, X and Y have different dimensions')
-        z = np.vstack((X,Y))
+            raise Exception(
+                'unable to apply CCA, X and Y have different dimensions')
+        z = np.vstack((X, Y))
         C = np.cov(z)
         sx = X.shape[0]
         sy = Y.shape[0]
@@ -57,18 +61,19 @@ class CCA(BaseEstimator, ClassifierMixin):
         r = sqrt(np.real(r))
         r = np.sort(np.real(r),  axis=None)
         r = np.flipud(r)
-        return r 
+        return r
+
 
 class ITCCA(CCA):
-    
+
     def fit(self, X, y=None):
-      '''
-      X : samples x channels x trials?
-      '''
-      stimuli_count = len(list(set(y)))
-      refs = []
-      for i in range(stimuli_count): 
-          refs.append(np.mean(X[:,:,np.where(y==i+1)].squeeze(), axis=2))
-      self.references = np.array(refs).transpose((0,2,1))
-      # references : 
-      return self
+        '''
+        X : samples x channels x trials?
+        '''
+        stimuli_count = len(list(set(y)))
+        refs = []
+        for i in range(stimuli_count):
+            refs.append(np.mean(X[:, :, np.where(y == i+1)].squeeze(), axis=2))
+        self.references = np.array(refs).transpose((0, 2, 1))
+        # references :
+        return self
