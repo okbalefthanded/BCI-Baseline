@@ -6,17 +6,21 @@ import numpy as np
 
 class CCA(BaseEstimator, ClassifierMixin):
     
-    def __init__(self, n_harmonics=2, frequencies=[], references=None, length=4):
+    def __init__(self, n_harmonics=2, frequencies=[], phase=None, references=None, length=4):
         self.n_harmonics = n_harmonics
         self.frequencies = frequencies
         self.references = references
+        self.phase = phase
         self.length = length
 
     def fit(self, X, y=None):
         # construct frequency template
         samples = X.shape[1]
         t = np.linspace(0.0, float(self.length), samples)
-        refs = [ [np.cos(2*np.pi*f*t*i),np.sin(2*np.pi*f*t*i)] for f in self.frequencies for i in range(1, self.n_harmonics+1)]
+        if self.phase:
+            refs = [ [np.cos(2*np.pi*f*t*i),np.sin(2*np.pi*f*t*i)] for f in self.frequencies for i in range(1, self.n_harmonics+1)]
+        else:
+            refs = [ [np.cos(2*np.pi*f*t*i+self.phase[k]*i), np.sin(2*np.pi*f*t*i+self.phase[k]*i)] for k,f in enumerate(self.frequencies) for i in range(1, self.n_harmonics+1)]
         self.references =  np.array(refs).reshape(len(self.frequencies), 2*self.n_harmonics, samples) 
         return self
 
