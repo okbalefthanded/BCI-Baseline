@@ -85,10 +85,11 @@ class TRCA(BaseEstimator, ClassifierMixin):
                     traindata = self.trains[class_i, fb_i, :, :]
                     if self.ensemble:
                         w = self.w[fb_i, :, :].T
+                        # Follows corrcoef MATLAB function implementation
+                        r_tmp = np.corrcoef(np.matmul(testdata.T, w).flatten(), np.matmul(traindata.T, w).flatten())
                     else:
                         w = self.w[fb_i, class_i, :]
-                    r_tmp = np.corrcoef(
-                        np.matmul(testdata.T, w), np.matmul(traindata.T, w))
+                        r_tmp = np.corrcoef(np.matmul(testdata.T, w), np.matmul(traindata.T, w))
                     r[fb_i, class_i] = r_tmp[0, 1]
 
             rho = np.matmul(fb_coefs, r)
@@ -147,6 +148,6 @@ class TRCA(BaseEstimator, ClassifierMixin):
         else:
             for trial_i in range(num_trials):
                 for ch_i in range(num_chans):
-                    yy[ch_i, :, trial_i] = filtfilt(
-                        B, A, eeg[ch_i, :, trial_i])
+                    # yy[ch_i, :, trial_i] = filtfilt(B, A, eeg[ch_i, :, trial_i])
+                    yy[ch_i, :, trial_i] = filtfilt(B, A, eeg[ch_i, :, trial_i], padtype='odd', padlen=3*(max(len(B),len(A))-1))
         return yy
