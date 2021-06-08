@@ -31,8 +31,9 @@ class CCA(BaseEstimator, ClassifierMixin):
         return self._apply_cca(X)
 
     def predict(self, X, y=None):
-        return np.argmax(self.decision_function(X))
-
+        # return np.argmax(self.decision_function(X))
+        return np.argmax(np.sum(self.decision_function(X), axis=0) / len(self.references))
+        
     def predict_proba(self, X):
         pass
 
