@@ -17,7 +17,7 @@ class SWLDA(BaseEstimator, ClassifierMixin):
         self.inmodel = None
     
     def fit(self, X, y=None, penter=0.1, premove=0.15):
-        yy = y
+        yy = np.copy(y)
         yy[yy==0.] = -1
         b, se, pval, inmodel, stats, nextstep, history = stepwisefit(X, yy, penter=0.1, premove=0.15)
         x1 = X[yy==1,:]
@@ -32,13 +32,15 @@ class SWLDA(BaseEstimator, ClassifierMixin):
         return self
     
     def decision_function(self,X):
-        return np.dot(X,self.w) + self.b
+        return np.dot(X, self.w) + self.b
     
     def predict(self, X, y=None):
-        return  np.sign(self.decision_function(X))   
+        pred = np.sign(self.decision_function(X))
+        pred[pred==-1.] = 0.
+        return pred    
     
     def score(self,X, y=None):
-        return accuracy_score(y,self.predict(X))
+        return accuracy_score(y, self.predict(X))
     
     def predict_proba(self,X):
         return softmax(self.decision_function(X))
