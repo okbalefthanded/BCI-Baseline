@@ -98,12 +98,11 @@ class BLDA(BaseEstimator, ClassifierMixin):
         return np.dot(X.T, self.w) 
     
     def predict(self, X, y=None):
-        return self.decision_function(X)
-            
+        return self.decision_function(X)            
     
     def score(self,X, y=None):
         pass
     
-    def predict_proba(self,X):
-        pass
+    def predict_proba(self, X):
+        return self.decision_function(X)
 

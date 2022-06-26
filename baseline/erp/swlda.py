@@ -4,6 +4,7 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.metrics import accuracy_score
 from sklearn.utils.extmath import softmax
 from .stepwise.stepwise import stepwisefit
+from copy import deepcopy
 import numpy as np
 
 class SWLDA(BaseEstimator, ClassifierMixin): 
@@ -43,4 +44,5 @@ class SWLDA(BaseEstimator, ClassifierMixin):
         return accuracy_score(y, self.predict(X))
     
     def predict_proba(self,X):
-        return softmax(self.decision_function(X))
+        # return softmax(self.decision_function(X))
+        return self.decision_function(X)
