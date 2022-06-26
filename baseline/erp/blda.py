@@ -23,11 +23,21 @@ class BLDA(BaseEstimator, ClassifierMixin):
 
         y = y.astype(np.float32)
         y = y.T
-        n_posexamples = np.sum(y==1)
-        n_negexamples = np.sum(y==-1)
+        classes = np.unique(y)
+        if -1 in classes:
+            self.neg_class = -1.  
+        n_posexamples = np.sum(y==self.pos_class)
+        n_negexamples = np.sum(y==self.neg_class)
         n_examples = n_posexamples + n_negexamples
-        y[y==1] = n_examples / n_posexamples
-        y[y==-1] = -n_examples / n_negexamples
+        y[y==self.pos_class] = n_examples / n_posexamples
+        y[y==self.neg_class] = -n_examples / n_negexamples
+
+        # n_posexamples = np.sum(y==1)
+        # n_negexamples = np.sum(y==-1)
+        # n_examples = n_posexamples + n_negexamples
+        # y[y==1] = n_examples / n_posexamples
+        # y[y==-1] = -n_examples / n_negexamples
+        
         # add feature that is constantly one (bias term)
         if X.shape[0] == n_instances:
             X = X.T
@@ -99,7 +109,13 @@ class BLDA(BaseEstimator, ClassifierMixin):
         return np.dot(X.T, self.w) 
     
     def predict(self, X, y=None):
-        return self.decision_function(X)            
+        scores = self.decision_function(X) # self.score(X).squeeze()
+        predictions = np.zeros(len(scores))
+        predictions[scores > 0.] = 1.
+        if self.neg_class == -1:
+          predictions[scores <= 0.] = -1
+        return predictions    
+        # return self.decision_function(X)            
     
     def score(self,X, y=None):
         pass
