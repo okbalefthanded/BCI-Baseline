@@ -1,4 +1,5 @@
 from sklearn.base import BaseEstimator, ClassifierMixin
+from scipy.special import expit
 from scipy.linalg import eigh
 import numpy as np
 
@@ -103,6 +104,9 @@ class BLDA(BaseEstimator, ClassifierMixin):
     def score(self,X, y=None):
         pass
     
-    def predict_proba(self, X):
-        return self.decision_function(X)
+    def predict_proba(self,X):
+        # return softmax(self.decision_function(X))
+        # return self.decision_function(X)
+        decision = self.decision_function(X)
+        return proba = expit(decision)
 
