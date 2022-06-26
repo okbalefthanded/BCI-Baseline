@@ -111,7 +111,7 @@ class BLDA(BaseEstimator, ClassifierMixin):
         return np.dot(X.T, self.w) 
     
     def predict(self, X, y=None):
-        scores = self.decision_function(X) # self.score(X).squeeze()
+        scores = self.decision_function(X).squeeze() # self.score(X).squeeze()
         predictions = np.zeros(len(scores))
         predictions[scores > 0.] = 1.
         if self.neg_class == -1:
