@@ -48,6 +48,6 @@ class SWLDA(BaseEstimator, ClassifierMixin):
         # return softmax(self.decision_function(X))
         # return self.decision_function(X)
         decision = self.decision_function(X)
-        return proba = expit(decision)
+        return expit(decision)
             
         
