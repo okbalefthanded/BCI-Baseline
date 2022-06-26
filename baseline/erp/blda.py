@@ -12,6 +12,8 @@ class BLDA(BaseEstimator, ClassifierMixin):
         self.beta = 0
         self.w = []
         self.p = []
+        self.pos_class = 1.
+        self.neg_class = 0.
         self.verbose = verbose
     
     def fit(self, X, y=None):
