@@ -22,18 +22,26 @@ class BLDA(BaseEstimator, ClassifierMixin):
         # compute regression targets from class labels 
         # (to do lda via regression)      
         n_instances = y.shape[0]
-
-        y = y.astype(np.float32)
-        y = y.T
-        classes = np.unique(y)
+        yy = y.astype(np.float32)
+        yy = yy.T
+        # y = y.astype(np.float32)
+        # y = y.T
+        # classes = np.unique(y)
+        classes = np.unique(yy)
         if -1 in classes:
             self.neg_class = -1.  
+        '''
         n_posexamples = np.sum(y==self.pos_class)
         n_negexamples = np.sum(y==self.neg_class)
         n_examples = n_posexamples + n_negexamples
         y[y==self.pos_class] = n_examples / n_posexamples
         y[y==self.neg_class] = -n_examples / n_negexamples
-
+        '''
+        n_posexamples = np.sum(yy==self.pos_class)
+        n_negexamples = np.sum(yy==self.neg_class)
+        n_examples = n_posexamples + n_negexamples
+        yy[yy==self.pos_class] = n_examples / n_posexamples
+        yy[yy==self.neg_class] = -n_examples / n_negexamples
         # n_posexamples = np.sum(y==1)
         # n_negexamples = np.sum(y==-1)
         # n_examples = n_posexamples + n_negexamples
@@ -130,5 +138,5 @@ class BLDA(BaseEstimator, ClassifierMixin):
         # return softmax(self.decision_function(X))
         # return self.decision_function(X)
         decision = self.decision_function(X)
-        return expit(decision)
+        return expit(decision).squeeze()
 

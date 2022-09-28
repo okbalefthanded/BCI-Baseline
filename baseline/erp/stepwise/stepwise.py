@@ -104,6 +104,7 @@ def stepcalc(allx, y, inmodel):
     # to rows of X that were thrown out.
     b = np.zeros((nin, 1))
     Qb = np.dot(Q.conj().T, y)
+    print(Qb.shape, Qb.min(), Qb.max())
     Qb[abs(Qb) < tol * max(abs(Qb))] = 0
     b[perm] = linalg.solve(R, Qb)
 
