@@ -113,6 +113,10 @@ class BLDA(BaseEstimator, ClassifierMixin):
     def predict(self, X, y=None):
         scores = self.decision_function(X).squeeze() # self.score(X).squeeze()
         predictions = np.zeros(len(scores))
+        # following 
+        # [1] J. Meng, X. Sheng, D. Zhang, and X. Zhu, “Improved semisupervised adaptation 
+        # for a small training dataset in the brain-computer interface,” 
+        # IEEE J. Biomed. Heal. Informatics, vol. 18, no. 4, pp. 1461–1472, 2014.
         predictions[scores > 0.] = 1.
         if self.neg_class == -1:
           predictions[scores <= 0.] = -1
