@@ -69,7 +69,7 @@ class BLDA(BaseEstimator, ClassifierMixin):
         d.sort()
         v = v[:, sort_perm]
         d = d.reshape( (d.shape[0],1) )
-        vxy = np.linalg.multi_dot([v.T, X, y.T])                 # dito
+        vxy = np.linalg.multi_dot([v.T, X, yy.T])                 # dito
         vxy = vxy.reshape((vxy.shape[0], 1))                     # dito
         e = np.ones( (n_features-1,1))     # dito
         
@@ -78,7 +78,7 @@ class BLDA(BaseEstimator, ClassifierMixin):
             alphaold = alpha
             betaold  = beta        
             m = beta * np.dot(v , np.multiply( np.power(beta*d+np.vstack((alpha*e, biasalpha)), -1), vxy) )            
-            err = np.sum( np.power( y-np.dot(m.T,X), 2 ) )            
+            err = np.sum( np.power( yy-np.dot(m.T,X), 2 ) )            
             gamma = np.sum(  np.true_divide(beta*d, beta*d+np.vstack((alpha*e, biasalpha))) )
             alpha = gamma / np.asscalar(np.dot(m.T,m))
             beta  = (n_examples - gamma) / err
