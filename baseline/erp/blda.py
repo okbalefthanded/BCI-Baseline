@@ -80,7 +80,8 @@ class BLDA(BaseEstimator, ClassifierMixin):
             m = beta * np.dot(v , np.multiply( np.power(beta*d+np.vstack((alpha*e, biasalpha)), -1), vxy) )            
             err = np.sum( np.power( yy-np.dot(m.T,X), 2 ) )            
             gamma = np.sum(  np.true_divide(beta*d, beta*d+np.vstack((alpha*e, biasalpha))) )
-            alpha = gamma / np.asscalar(np.dot(m.T,m))
+            # alpha = gamma / np.asscalar(np.dot(m.T,m))
+            alpha = gamma / np.dot(m.T,m).item()
             beta  = (n_examples - gamma) / err
             if self.verbose:
                 print('Iteration %d : alpha = %f, beta = %f\n' % (i,alpha,beta) )            
