@@ -1,6 +1,6 @@
 from sklearn.base import BaseEstimator, ClassifierMixin
 from scipy.linalg import eig
-from scipy import sqrt
+# from scipy import sqrt
 import numpy as np
 
 
@@ -59,7 +59,7 @@ class CCA(BaseEstimator, ClassifierMixin):
         invCyy = np.linalg.pinv(Cyy)
         invCxx = np.linalg.pinv(Cxx)
         r, Wx = eig(invCxx.dot(Cxy).dot(invCyy).dot(Cyx))
-        r = sqrt(np.real(r))
+        r = np.sqrt(np.real(r))
         r = np.sort(np.real(r),  axis=None)
         r = np.flipud(r)
         return r
