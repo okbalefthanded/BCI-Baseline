@@ -59,7 +59,8 @@ class CCA(BaseEstimator, ClassifierMixin):
         invCyy = np.linalg.pinv(Cyy)
         invCxx = np.linalg.pinv(Cxx)
         r, Wx = eig(invCxx.dot(Cxy).dot(invCyy).dot(Cyx))
-        r = np.sqrt(np.real(r))
+        # r = sqrt(np.real(r))
+        r = np.lib.scimath.sqrt(np.real(r))
         r = np.sort(np.real(r),  axis=None)
         r = np.flipud(r)
         return r
